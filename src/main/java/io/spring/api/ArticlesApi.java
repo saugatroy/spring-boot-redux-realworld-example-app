@@ -9,11 +9,11 @@ import io.spring.core.article.ArticleRepository;
 import io.spring.core.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import javax.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,8 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.HashMap;
+
+import javax.validation.constraints.NotNull;
 
 import io.honeycomb.beeline.spring.beans.aspects.ChildSpan;
 
@@ -39,7 +40,7 @@ public class ArticlesApi {
     }
 
     @PostMapping
-    public ResponseEntity createArticle(@Valid @RequestBody NewArticleParam newArticleParam,
+    public ResponseEntity createArticle(@Validated @RequestBody NewArticleParam newArticleParam,
                                         BindingResult bindingResult,
                                         @AuthenticationPrincipal User user) {
         if (bindingResult.hasErrors()) {
@@ -81,11 +82,11 @@ public class ArticlesApi {
 @JsonRootName("article")
 @NoArgsConstructor
 class NewArticleParam {
-    @NotBlank(message = "can't be empty")
+    @NotNull(message = "can't be empty")
     private String title;
-    @NotBlank(message = "can't be empty")
+    @NotNull(message = "can't be empty")
     private String description;
-    @NotBlank(message = "can't be empty")
+    @NotNull(message = "can't be empty")
     private String body;
     private String[] tagList;
 }
